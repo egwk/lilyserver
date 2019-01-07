@@ -52,8 +52,8 @@ function compileLily($cachefolder, $filename, $png = false)
     }
 }
 
-$filename = tempnam();
-$cachefolder = "/code/cache/";
+$filename = basename(tempnam('', 'lily_'));
+$cachefolder = "/cache/";
 $lilycode = base64_decode(post("lilycode"));
 file_put_contents("$cachefolder$filename.ly", $lilycode);
 
@@ -63,7 +63,7 @@ if(onOff(post("png")))
 	$img = imagecreatefrompng("$cachefolder$filename.png");
 	if(onOff(post("autotrim")))
 	{
-		$cropped = imagecropauto($img, IMG_CROP_WHITE);
+		$cropped = imagecropauto($img, IMG_CROP_WHITE, 0);
 		imagedestroy($img);
 		$img = $cropped;
 	}
@@ -76,4 +76,3 @@ if(onOff(post("png")))
 	header("Content-Type: application/pdf");
 	readfile("$cachefolder$filename.pdf");
 }
-
